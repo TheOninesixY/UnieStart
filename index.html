@@ -3,898 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>F-导航</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%B5%3C/text%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%B5%3C/text%3E%3C/svg%3E">
-
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; }
-        body {
-            min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;
-            background: linear-gradient(145deg, #0f1f2f, #1a3450); background-size: cover; background-position: center;
-            background-repeat: no-repeat; transition: background-image 0.6s ease; background-color: #152b3e;
-            cursor: default; flex-direction: column; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
-            position: relative;
-        }
-        .glass-card {
-            width: 100%; max-width: 780px; padding: 2rem 1.8rem 2rem; background: transparent; backdrop-filter: none;
-            -webkit-backdrop-filter: none; border-radius: 0; border: none; box-shadow: none; color: #f0f7ff;
-            text-align: center; position: relative; display: flex; flex-direction: column; align-items: center;
-            justify-content: center; min-height: 50vh; flex: 1; -webkit-user-select: none; user-select: none; z-index: 1;
-        }
-
-        /* IE 警告 */
-        #ie-warning {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 999999;
-            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            justify-content: center; align-items: center; text-align: center; color: #ffffff;
-            font-family: system-ui, -apple-system, sans-serif; padding: 40px;
-        }
-        #ie-warning .ie-box {
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 32px; padding: 48px 40px; max-width: 560px;
-            width: 100%; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
-        }
-        #ie-warning .ie-icon { font-size: 64px; margin-bottom: 16px; }
-        #ie-warning h2 { font-size: 24px; font-weight: 600; margin-bottom: 12px; color: #ffffff; }
-        #ie-warning p { font-size: 16px; line-height: 1.6; color: rgba(255, 255, 255, 0.7); margin-bottom: 28px; }
-        #ie-warning .ie-browsers {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        #ie-warning .ie-browsers a {
-            display: inline-block; padding: 10px 24px; border-radius: 40px; background: rgba(255, 255, 255, 0.08);
-            color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.2s ease;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        #ie-warning .ie-browsers a:hover { background: rgba(255, 255, 255, 0.16); transform: translateY(-2px); }
-
-        /* 语言选择菜单 */
-        .language-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; align-items: center;
-            justify-content: center; z-index: 9999; padding: 20px; animation: fadeIn 0.4s ease;
-        }
-        .language-overlay.hidden { display: none; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        .language-menu {
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border-radius: 32px; padding: 2.4rem 2.8rem 2.8rem; border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5); max-width: 460px; width: 100%; text-align: center;
-        }
-        .language-menu h2 { font-size: 1.6rem; font-weight: 500; color: #ffffff; margin-bottom: 6px; letter-spacing: 0.5px; }
-        .language-menu .sub { font-size: 0.85rem; color: rgba(255, 255, 255, 0.4); margin-bottom: 24px; letter-spacing: 1px; }
-        .language-options { display: flex; flex-direction: column; gap: 8px; }
-        .language-options .lang-btn {
-            padding: 12px 20px; border-radius: 16px; background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06); color: rgba(255, 255, 255, 0.7); font-size: 1rem;
-            cursor: pointer; transition: all 0.25s ease; text-align: center; letter-spacing: 0.5px; font-weight: 400;
-        }
-        .language-options .lang-btn:hover { background: rgba(255, 255, 255, 0.08); color: #ffffff; border-color: rgba(255, 255, 255, 0.12); transform: scale(1.01); }
-        .language-options .lang-btn:active { transform: scale(0.97); }
-
-        /* 问候语和搜索框 */
-        .greeting-header { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 28px; width: 100%; }
-        .greeting-header .greeting-icon { font-size: 2.8rem; filter: drop-shadow(0 4px 16px rgba(0,0,0,0.4)); line-height: 1; }
-        .greeting-header .greeting-title {
-            font-weight: 600; font-size: 2.8rem; background: linear-gradient(135deg, #ffffff, #b8d4f0);
-            -webkit-background-clip: text; background-clip: text; color: transparent;
-            text-shadow: 0 2px 30px rgba(0,40,80,0.3); letter-spacing: 1px;
-        }
-        .search-fusion {
-            width: 100%; max-width: 680px; background: rgba(0, 0, 0, 0.25) !important; backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important; border-radius: 80px; padding: 6px 6px 6px 24px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 30px rgba(255, 255, 255, 0.02);
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); display: flex; align-items: center; gap: 6px;
-            flex-wrap: wrap; margin-bottom: 20px;
-        }
-        .search-fusion:focus-within { background: rgba(0, 0, 0, 0.35) !important; border-color: rgba(255, 255, 255, 0.3); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 50px rgba(255, 255, 255, 0.04); }
-        .search-input-fusion { flex: 1; background: transparent; border: none; padding: 14px 10px 14px 8px; font-size: 1.1rem; color: #ffffff; outline: none; min-width: 120px; letter-spacing: 0.3px; }
-        .search-input-fusion::placeholder { color: rgba(255, 255, 255, 0.7); font-weight: 300; }
-        .search-btn-fusion {
-            background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 60px;
-            padding: 12px 26px; font-size: 1rem; font-weight: 500; color: #fff; backdrop-filter: none;
-            -webkit-backdrop-filter: none; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center;
-            gap: 8px; white-space: nowrap; box-shadow: none;
-        }
-        .search-btn-fusion:hover { background: rgba(255, 255, 255, 0.25); border-color: rgba(255, 255, 255, 0.25); transform: scale(1.02); }
-        .search-btn-fusion:active { transform: scale(0.96); }
-
-        /* 引擎选择器 */
-        .engine-selector-wrapper { width: 100%; max-width: 720px; display: flex; justify-content: center; }
-        .desktop-capsule {
-            display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.2) !important;
-            backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
-            border: 1px solid rgba(255, 255, 255, 0.15) !important; border-radius: 24px !important; padding: 10px 16px;
-            box-shadow: none !important; flex-wrap: nowrap !important; overflow-x: auto; overflow-y: hidden;
-            justify-content: flex-start; gap: 4px; position: relative; scrollbar-width: none; -ms-overflow-style: none;
-        }
-        .desktop-capsule::-webkit-scrollbar { display: none; }
-        .desktop-capsule .nav-indicator {
-            position: absolute; top: 10px; left: 16px; height: calc(100% - 20px); background: rgba(255, 255, 255, 0.15);
-            border-radius: 40px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); pointer-events: none;
-            transition: left 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            z-index: 1;
-        }
-        .desktop-capsule .engine-option {
-            position: relative; display: flex; align-items: center; justify-content: center; padding: 8px 18px;
-            border-radius: 40px; background: transparent; color: rgba(255, 255, 255, 0.7); font-size: 0.85rem;
-            font-weight: 500; cursor: pointer; transition: color 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            user-select: none; letter-spacing: 0.2px; flex-shrink: 0; text-align: center; z-index: 2; white-space: nowrap;
-        }
-        .desktop-capsule .engine-option:hover { color: rgba(255, 255, 255, 0.9); }
-        .desktop-capsule .engine-option.active { color: #ffffff; }
-
-        .mobile-list { display: none; width: 100%; background: rgba(0, 0, 0, 0.2) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border: 1px solid rgba(255, 255, 255, 0.15) !important; border-radius: 24px !important; padding: 6px 0; box-shadow: none !important; flex-direction: column; position: relative; }
-        .mobile-list .nav-indicator-mobile {
-            position: absolute; left: 6px; right: 6px; height: 44px; background: rgba(255, 255, 255, 0.15);
-            border-radius: 18px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); pointer-events: none;
-            transition: top 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); z-index: 1;
-        }
-        .mobile-list .engine-option {
-            position: relative; padding: 12px 20px; width: 100%; text-align: center; color: rgba(255, 255, 255, 0.7);
-            font-size: 1.1rem; font-weight: 400; transition: color 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; z-index: 2; border-radius: 0;
-        }
-        .mobile-list .engine-option:active { transform: scale(0.97); }
-        .mobile-list .engine-option.active { color: #ffffff; font-weight: 600; }
-        .mobile-list .engine-option:not(:last-child) { border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
-
-        /* 底部版权 */
-        .footer-wrapper { width: 100%; display: flex; justify-content: center; padding: 16px 0 8px 0; margin-top: 20px; }
-        .footer-studio { font-size: 0.7rem; letter-spacing: 1.5px; color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: 300; padding: 0 12px; }
-
-        /* 右键菜单 */
-        .custom-context-menu {
-            position: fixed; top: 0; left: 0; display: none; background: rgba(40, 44, 52, 0.85);
-            backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 6px 0; min-width: 190px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6); z-index: 99999; overflow: hidden;
-            animation: menuFadeIn 0.15s ease; pointer-events: auto;
-        }
-        @keyframes menuFadeIn { from { opacity: 0; transform: scale(0.95) translateY(-5px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        .custom-context-menu .menu-item { display: flex; align-items: center; gap: 12px; padding: 10px 20px; font-size: 0.9rem; color: #f0f0f0; cursor: pointer; transition: all 0.1s ease; user-select: none; -webkit-user-select: none; }
-        .custom-context-menu .menu-item:hover { background: rgba(255, 255, 255, 0.12); color: #ffffff; }
-        .custom-context-menu .menu-item:active { transform: scale(0.98); }
-        .custom-context-menu .menu-item .icon { font-size: 1.1rem; }
-        .custom-context-menu .menu-divider { height: 1px; background: rgba(255, 255, 255, 0.08); margin: 4px 12px; }
-
-        /* 移动端适配 */
-        .is-mobile body { align-items: flex-start; padding: 12px 10px; }
-        .is-mobile .glass-card { padding: 0.6rem 0.2rem 1.2rem; min-height: auto; justify-content: flex-start; width: 100%; flex: 1; }
-        .is-mobile .greeting-header { margin-bottom: 12px; gap: 8px; }
-        .is-mobile .greeting-header .greeting-icon { font-size: 1.8rem; }
-        .is-mobile .greeting-header .greeting-title { font-size: 1.6rem; }
-        .is-mobile .search-fusion { order: -1; margin-bottom: 14px; padding: 4px 4px 4px 16px; max-width: 100%; border-radius: 60px; }
-        .is-mobile .search-input-fusion { font-size: 0.95rem; padding: 10px 6px; min-width: 80px; }
-        .is-mobile .search-btn-fusion { padding: 8px 16px; font-size: 0.85rem; }
-        .is-mobile .desktop-capsule { display: none; }
-        .is-mobile .mobile-list { display: flex; }
-        .is-mobile .footer-wrapper { padding: 12px 0 6px 0; }
-        .is-mobile .footer-studio { font-size: 0.55rem; }
-        .is-mobile-small .glass-card { padding: 0.4rem 0.1rem 1rem; }
-        .is-mobile-small .greeting-header .greeting-icon { font-size: 1.4rem; }
-        .is-mobile-small .greeting-header .greeting-title { font-size: 1.2rem; }
-        .is-mobile-small .search-input-fusion { font-size: 0.85rem; padding: 8px 4px; }
-        .is-mobile-small .search-btn-fusion { padding: 6px 12px; font-size: 0.75rem; }
-        .is-mobile-small .search-fusion { padding: 4px 4px 4px 12px; border-radius: 50px; }
-        @media (max-width: 480px) { .language-menu { padding: 1.8rem 1.2rem 2rem; border-radius: 24px; } .language-menu h2 { font-size: 1.3rem; } .language-options .lang-btn { padding: 10px 16px; font-size: 0.9rem; } }
-    </style>
+    <title>UnieStart</title>
+    <!-- SVG Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff'%3E%3Cpath d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 14z'/%3E%3C/svg%3E">
+    <!-- Google Material Symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-theme="dark">
 
-    <!-- IE 警告 -->
-    <div id="ie-warning">
-        <div class="ie-box">
-            <div class="ie-icon">⚠️</div>
-            <h2>无法打开此页面</h2>
-            <p>当前浏览器版本过低，请使用现代浏览器（如 Edge、Chrome、Firefox 等）打开。</p>
-            <div class="ie-browsers">
-                <!-- 主流浏览器推荐 -->
-                <a href="https://www.microsoft.com/edge" target="_blank">Microsoft Edge</a>
-                <a href="https://www.google.com/chrome" target="_blank">Google Chrome</a>
-                <a href="https://www.mozilla.org/firefox" target="_blank">Firefox</a>
-                <!-- 新增：IE 兼容版入口 -->
-                <a href="https://fsousuo.dpdns.org/IE.html" target="_blank" style="border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.15);">访问 IE 兼容版</a>
-            </div>
-        </div>
-    </div>
+    <!-- 壁纸层 -->
+    <div class="wallpaper-layer" id="wallpaperLayer"></div>
 
-    <div class="language-overlay hidden" id="languageOverlay">
-        <div class="language-menu">
-            <h2 id="menuTitle">🌐 选择语言</h2>
-            <p class="sub" id="menuSub">请选择您偏好的语言</p>
-            <div class="language-options" id="languageOptions"></div>
-        </div>
-    </div>
-
-    <div class="glass-card" id="app">
+    <div class="glass-card">
+        <!-- 纯文字毛玻璃透光问候语：绝无任何背景盒子 -->
         <div class="greeting-header" id="greetingHeader">
-            <span class="greeting-icon" id="greetingHeaderIcon">🌅</span>
             <span class="greeting-title" id="greetingHeaderTitle">Good morning!</span>
         </div>
 
-        <div class="search-fusion" id="searchFusion">
-            <input type="text" class="search-input-fusion" id="searchInput" placeholder="输入关键词…" autofocus>
-            <button class="search-btn-fusion" id="searchBtn"><span>🔍</span> 搜索</button>
+        <!-- 经典暗黑毛玻璃圆角搜索框 -->
+        <div class="search-fusion">
+            <input type="text" class="search-input-fusion" id="searchInput" placeholder="输入关键词或网址…" autofocus>
+            <button class="search-btn-fusion" id="searchBtn">
+                <span class="material-symbols-outlined">search</span>
+                <span>搜索</span>
+            </button>
         </div>
 
-        <div class="engine-selector-wrapper">
-            <!-- 桌面版：横向胶囊 -->
-            <div class="desktop-capsule" id="desktopEngineSelector">
-                <div class="nav-indicator" id="navIndicator"></div>
-                <span class="engine-option active" data-engine="bing">必应</span>
-                <span class="engine-option" data-engine="baidu">百度</span>
-                <span class="engine-option" data-engine="sogou">搜狗</span>
-                <span class="engine-option" data-engine="google">Google</span>
-                <span class="engine-option" data-engine="yahoo">雅虎</span>
-                <span class="engine-option" data-engine="bilibili">哔哩哔哩</span>
-                <span class="engine-option" data-engine="duckduckgo">DuckDuckGo</span>
-            </div>
-            <!-- 手机版：垂直列表 -->
-            <div class="mobile-list" id="mobileEngineList">
-                <div class="nav-indicator-mobile" id="navIndicatorMobile"></div>
-                <span class="engine-option active" data-engine="bing">必应</span>
-                <span class="engine-option" data-engine="baidu">百度</span>
-                <span class="engine-option" data-engine="sogou">搜狗</span>
-                <span class="engine-option" data-engine="google">Google</span>
-                <span class="engine-option" data-engine="yahoo">雅虎</span>
-                <span class="engine-option" data-engine="bilibili">哔哩哔哩</span>
-                <span class="engine-option" data-engine="duckduckgo">DuckDuckGo</span>
-            </div>
+        <!-- 快捷磁贴网格 -->
+        <div class="shortcuts-grid" id="shortcutsContainer"></div>
+    </div>
+
+    <!-- 放置于最下方的暗黑毛玻璃搜索引擎切换条 -->
+    <div class="bottom-engine-container">
+        <div class="desktop-capsule" id="desktopEngineSelector">
+            <div class="nav-indicator" id="navIndicator"></div>
+            <span class="engine-option active" data-engine="bing">必应</span>
+            <span class="engine-option" data-engine="baidu">百度</span>
+            <span class="engine-option" data-engine="sogou">搜狗</span>
+            <span class="engine-option" data-engine="google">Google</span>
+            <span class="engine-option" data-engine="yahoo">雅虎</span>
+            <span class="engine-option" data-engine="bilibili">哔哩哔哩</span>
+            <span class="engine-option" data-engine="duckduckgo">DuckDuckGo</span>
         </div>
     </div>
 
-    <div class="footer-wrapper">
-        <div class="footer-studio" id="footerStudio">- Finder studio 工作室制作 - V2.0</div>
-    </div>
-
-    <!-- ===== 自定义右键菜单 ===== -->
+    <!-- 右键与长按快捷菜单 -->
     <div class="custom-context-menu" id="customContextMenu">
-        <div class="menu-item" id="menuBrowser">
-            <span class="icon">🌐</span>
-            <span data-i18n="menu_browser">浏览器原生菜单</span>
+        <div class="menu-hover-indicator" id="menuHoverIndicator"></div>
+        <div class="menu-item" id="menuSettings">
+            <span class="material-symbols-outlined">settings</span>
+            <span>设置</span>
         </div>
+        <div class="menu-divider"></div>
         <div class="menu-item" id="menuReload">
-            <span class="icon">🔄</span>
-            <span data-i18n="menu_reload">刷新页面</span>
+            <span class="material-symbols-outlined">refresh</span>
+            <span>刷新页面</span>
         </div>
-        <div class="menu-divider"></div>
-        <div class="menu-item" id="menuAgreement">
-            <span class="icon">📜</span>
-            <span data-i18n="menu_agreement">用户协议</span>
-        </div>
-        <div class="menu-item" id="menuPrivacy">
-            <span class="icon">🔒</span>
-            <span data-i18n="menu_privacy">隐私政策</span>
-        </div>
-        <div class="menu-divider"></div>
         <div class="menu-item" id="menuDownloadBg">
-            <span class="icon">🖼️</span>
-            <span data-i18n="menu_download">下载背景</span>
+            <span class="material-symbols-outlined">image</span>
+            <span>下载背景</span>
         </div>
-        <div class="menu-divider"></div>
-        <div class="menu-item" id="menuStar">
-            <span class="icon">⭐</span>
-            <span data-i18n="menu_star">去仓库给 Star</span>
+        <!-- 针对磁贴的专属项 -->
+        <div class="menu-divider" id="menuTileDivider" style="display:none;"></div>
+        <div class="menu-item" id="menuEditTile" style="display:none;">
+            <span class="material-symbols-outlined">edit</span>
+            <span>修改磁贴</span>
+        </div>
+        <div class="menu-item" id="menuDeleteTile" style="display:none; color:#f87171;">
+            <span class="material-symbols-outlined" style="color:#f87171;">delete</span>
+            <span>删除磁贴</span>
         </div>
     </div>
 
-    <script>
-        // Cookie 工具（仅保留壁纸缓存）
-        function setCookie(name, value) {
-            var date = new Date('9999-12-31T23:59:59Z');
-            document.cookie = name + "=" + encodeURIComponent(value) + "; expires=" + date.toUTCString() + "; path=/";
-        }
+    <!-- 侧边栏设置抽屉 -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="settings-drawer" id="settingsDrawer">
+        <div class="drawer-header">
+            <h2>
+                <span class="material-symbols-outlined">settings</span>
+                <span>设置</span>
+            </h2>
+            <button class="drawer-close-btn" id="drawerCloseBtn">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="drawer-content">
+            <div class="drawer-group">
+                <label class="drawer-label">外观主题</label>
+                <select class="drawer-select" id="settingTheme">
+                    <option value="dark">深色模式 (Dark)</option>
+                    <option value="light">浅色模式 (Light)</option>
+                    <option value="auto">跟随系统 (System Auto)</option>
+                </select>
+            </div>
 
-        function getCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) == 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
-            }
-            return null;
-        }
+            <div class="drawer-toggle-row">
+                <span class="drawer-label">背景高斯模糊</span>
+                <label class="switch">
+                    <input type="checkbox" id="toggleBlur">
+                    <span class="slider"></span>
+                </label>
+            </div>
 
-        // IE 检测
-        (function() {
-            var ua = navigator.userAgent || '';
-            if (/MSIE|Trident/.test(ua)) {
-                document.documentElement.style.display = 'none';
-                var warning = document.getElementById('ie-warning');
-                if (warning) warning.style.display = 'flex';
-                return;
-            }
-        })();
+            <div class="drawer-toggle-row">
+                <span class="drawer-label">显示问候语</span>
+                <label class="switch">
+                    <input type="checkbox" id="toggleGreeting" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
 
-        (function() {
-            "use strict";
+            <div class="drawer-group">
+                <label class="drawer-label">搜索结果打开方式</label>
+                <select class="drawer-select" id="settingTarget">
+                    <option value="_blank">在新标签页打开</option>
+                    <option value="_self">在当前标签页打开</option>
+                </select>
+            </div>
 
-            var SUPPORTED_LOCALES = ['zh-CN', 'zh-TW', 'en', 'ja', 'ko'];
+            <div class="drawer-group">
+                <label class="drawer-label">壁纸操作</label>
+                <div class="drawer-btn-row">
+                    <button class="drawer-btn" id="btnRefreshWallpaper">
+                        <span class="material-symbols-outlined" style="font-size: 1.15rem;">refresh</span>
+                        <span>刷新壁纸</span>
+                    </button>
+                    <button class="drawer-btn" id="btnDownloadWallpaper">
+                        <span class="material-symbols-outlined" style="font-size: 1.15rem;">download</span>
+                        <span>下载当前壁纸</span>
+                    </button>
+                </div>
+            </div>
 
-            var LOCALE_DATA = {
-                'zh-CN': { label: '简体中文', placeholder: '输入关键词…', searchBtn: '搜索', engineLabels: { bing: '必应', baidu: '百度', sogou: '搜狗', google: 'Google', yahoo: '雅虎', bilibili: '哔哩哔哩', duckduckgo: 'DuckDuckGo' }, footer: '- Finder studio 工作室制作 -', menu: { browser: '浏览器原生菜单', reload: '刷新页面', agreement: '用户协议', privacy: '隐私政策', download: '下载背景', star: '去仓库给 Star' } },
-                'zh-TW': { label: '繁體中文', placeholder: '輸入關鍵詞…', searchBtn: '搜尋', engineLabels: { bing: '必應', baidu: '百度', sogou: '搜狗', google: 'Google', yahoo: '雅虎', bilibili: '嗶哩嗶哩', duckduckgo: 'DuckDuckGo' }, footer: '- Finder studio 工作室製作 -', menu: { browser: '瀏覽器原生選單', reload: '重新整理頁面', agreement: '用戶協議', privacy: '隱私政策', download: '下載背景', star: '去倉庫給 Star' } },
-                'en': { label: 'English', placeholder: 'Enter keywords…', searchBtn: 'Search', engineLabels: { bing: 'Bing', baidu: 'Baidu', sogou: 'Sogou', google: 'Google', yahoo: 'Yahoo', bilibili: 'Bilibili', duckduckgo: 'DuckDuckGo' }, footer: '- Finder studio -', menu: { browser: 'Browser Native Menu', reload: 'Reload Page', agreement: 'User Agreement', privacy: 'Privacy Policy', download: 'Download Wallpaper', star: 'Star on GitHub' } },
-                'ja': { label: '日本語', placeholder: 'キーワードを入力…', searchBtn: '検索', engineLabels: { bing: 'Bing', baidu: '百度', sogou: '搜狗', google: 'Google', yahoo: 'Yahoo', bilibili: 'Bilibili', duckduckgo: 'DuckDuckGo' }, footer: '- Finder studio スタジオ制作 -', menu: { browser: 'ブラウザネイティブメニュー', reload: 'ページを更新', agreement: '利用規約', privacy: 'プライバシーポリシー', download: '壁紙をダウンロード', star: 'GitHubでStarを付ける' } },
-                'ko': { label: '한국어', placeholder: '키워드를 입력하세요…', searchBtn: '검색', engineLabels: { bing: 'Bing', baidu: '바이두', sogou: '소우거우', google: 'Google', yahoo: 'Yahoo', bilibili: 'Bilibili', duckduckgo: 'DuckDuckGo' }, footer: '- Finder studio 스튜디오 제작 -', menu: { browser: '브라우저 네이티브 메뉴', reload: '페이지 새로고침', agreement: '이용약관', privacy: '개인정보처리방침', download: '배경화면 다운로드', star: 'GitHub에 Star 남기기' } }
-            };
+            <!-- 关于与 Fork 声明 -->
+            <div class="drawer-about-card">
+                <div><strong>UnieStart</strong></div>
+                <div>项目制作人：<strong>OninesixY</strong></div>
+                <div style="margin-top: 4px;">开源声明：本项目 Fork 自：<br>
+                    <a href="https://github.com/CNFinder-Linux/F-sousuo" target="_blank" rel="noopener noreferrer">https://github.com/CNFinder-Linux/F-sousuo</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            var DEFAULT_LOCALE = 'zh-CN';
+    <!-- 添加/编辑快捷磁贴弹窗 -->
+    <div class="modal-overlay" id="tileModal">
+        <div class="modal-card">
+            <div class="modal-title">
+                <span class="material-symbols-outlined">add_link</span>
+                <span id="tileModalTitle">添加快捷方式</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <label style="font-size:0.85rem; color:rgba(255,255,255,0.7);">名称</label>
+                <input type="text" class="modal-input" id="tileName" placeholder="例如：GitHub">
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <label style="font-size:0.85rem; color:rgba(255,255,255,0.7);">网址 (URL)</label>
+                <input type="url" class="modal-input" id="tileUrl" placeholder="https://github.com">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal btn-cancel" id="tileCancelBtn">取消</button>
+                <button class="btn-modal btn-save" id="tileSaveBtn">保存</button>
+            </div>
+        </div>
+    </div>
 
-            // DOM 引用
-            var overlay = document.getElementById('languageOverlay');
-            var menuTitle = document.getElementById('menuTitle');
-            var menuSub = document.getElementById('menuSub');
-            var langOptionsContainer = document.getElementById('languageOptions');
-            var searchInput = document.getElementById('searchInput');
-            var searchBtn = document.getElementById('searchBtn');
-            var footerEl = document.getElementById('footerStudio');
-            var greetingIcon = document.getElementById('greetingHeaderIcon');
-            var greetingTitle = document.getElementById('greetingHeaderTitle');
-
-            var desktopEngineOptions = document.querySelectorAll('#desktopEngineSelector .engine-option');
-            var navIndicator = document.getElementById('navIndicator');
-            var mobileEngineList = document.getElementById('mobileEngineList');
-            var mobileEngineOptions = document.querySelectorAll('#mobileEngineList .engine-option');
-            var navIndicatorMobile = document.getElementById('navIndicatorMobile');
-
-            var currentEngineKey = 'bing';
-            var isMobile = false;
-
-            // 右键菜单
-            var customMenu = document.getElementById('customContextMenu');
-            var menuBrowser = document.getElementById('menuBrowser');
-            var menuReload = document.getElementById('menuReload');
-            var menuAgreement = document.getElementById('menuAgreement');
-            var menuPrivacy = document.getElementById('menuPrivacy');
-            var menuDownloadBg = document.getElementById('menuDownloadBg');
-            var menuStar = document.getElementById('menuStar');
-
-            // 右键菜单事件
-            document.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-                showCustomMenu(e.clientX, e.clientY);
-            });
-
-            document.addEventListener('selectstart', function(e) { e.preventDefault(); });
-            document.addEventListener('copy', function(e) { e.preventDefault(); });
-
-            function showCustomMenu(x, y) {
-                var menuWidth = 190, menuHeight = 250, winWidth = window.innerWidth, winHeight = window.innerHeight;
-                if (x + menuWidth > winWidth) x = winWidth - menuWidth - 10;
-                if (y + menuHeight > winHeight) y = winHeight - menuHeight - 10;
-                if (x < 10) x = 10;
-                if (y < 10) y = 10;
-                customMenu.style.left = x + 'px';
-                customMenu.style.top = y + 'px';
-                customMenu.style.display = 'block';
-            }
-
-            function hideCustomMenu() { customMenu.style.display = 'none'; }
-
-            document.addEventListener('click', function(e) {
-                if (!customMenu.contains(e.target)) hideCustomMenu();
-            });
-
-            window.addEventListener('resize', function() { hideCustomMenu(); });
-
-            // 右键菜单各功能
-            menuBrowser.addEventListener('click', function(e) {
-                e.stopPropagation();
-                hideCustomMenu();
-                var fakeEvent = new MouseEvent('contextmenu', {
-                    bubbles: true,
-                    cancelable: true,
-                    view: window,
-                    clientX: e.clientX,
-                    clientY: e.clientY,
-                    button: 2,
-                    buttons: 2
-                });
-                var allowOnce = true;
-                var tempHandler = function(ev) {
-                    if (allowOnce) {
-                        allowOnce = false;
-                        document.removeEventListener('contextmenu', tempHandler);
-                        var target = document.elementFromPoint(e.clientX, e.clientY) || document.body;
-                        target.dispatchEvent(fakeEvent);
-                    }
-                };
-                document.addEventListener('contextmenu', tempHandler);
-                setTimeout(function() {
-                    document.removeEventListener('contextmenu', tempHandler);
-                }, 100);
-            });
-
-            menuReload.addEventListener('click', function(e) {
-                e.stopPropagation();
-                hideCustomMenu();
-                window.location.reload();
-            });
-
-            // --- 用户协议 ---
-            menuAgreement.addEventListener('click', function(e) {
-                e.stopPropagation();
-                hideCustomMenu();
-                window.location.href = '/Userxieyi.html';
-            });
-
-            // --- 隐私政策 ---
-            menuPrivacy.addEventListener('click', function(e) {
-                e.stopPropagation();
-                hideCustomMenu();
-                window.location.href = '/Useryinsi.html';
-            });
-
-            menuDownloadBg.addEventListener('click', function(e) {
-                e.stopPropagation();
-                hideCustomMenu();
-                var bgImage = window.getComputedStyle(document.body).backgroundImage;
-                if (bgImage && bgImage !== 'none') {
-                    var url = bgImage.replace(/url\(['"]?/g, '').replace(/['"]?\)/g, '');
-                    fetch(url).then(response => response.blob()).then(blob => {
-                        var blobUrl = URL.createObjectURL(blob);
-                        var a = document.createElement('a');
-                        a.href = blobUrl;
-                        a.download = 'bing_wallpaper.jpg';
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                        setTimeout(function() {
-                            URL.revokeObjectURL(blobUrl);
-                        }, 100);
-                    }).catch(function() {
-                        alert('背景图下载失败，可能是服务器限制了跨域请求。');
-                    });
-                } else {
-                    alert('未检测到可下载的背景图！');
-                }
-            });
-
-            menuStar.addEventListener('click', function(e) {
-                e.stopPropagation();
-                hideCustomMenu();
-                window.open('https://github.com/CNFinder-Linux/F-sousuo', '_blank');
-            });
-
-            // 语言检测
-            function detectLocale() {
-                var lang = navigator.language || navigator.userLanguage || 'en';
-                if (lang.startsWith('zh')) {
-                    if (lang === 'zh-TW' || lang === 'zh-HK' || lang === 'zh-MO') return 'zh-TW';
-                    return 'zh-CN';
-                }
-                if (lang.startsWith('ja')) return 'ja';
-                if (lang.startsWith('ko')) return 'ko';
-                return 'en';
-            }
-
-            function isSupported(locale) {
-                return SUPPORTED_LOCALES.indexOf(locale) !== -1;
-            }
-
-            function getLocaleData(locale) {
-                return LOCALE_DATA[locale] || LOCALE_DATA[DEFAULT_LOCALE];
-            }
-
-            // 问候语
-            function getGreeting() {
-                var hour = new Date().getHours();
-                if (hour >= 5 && hour < 12) return { emoji: '🌅', text: 'Good morning!' };
-                if (hour >= 12 && hour < 14) return { emoji: '☀️', text: 'Good noon!' };
-                if (hour >= 14 && hour < 18) return { emoji: '🌤️', text: 'Good afternoon!' };
-                return { emoji: '🌙', text: 'Good evening!' };
-            }
-
-            function updateGreeting() {
-                var g = getGreeting();
-                if (greetingIcon) greetingIcon.textContent = g.emoji;
-                if (greetingTitle) greetingTitle.textContent = g.text;
-            }
-
-            // 应用界面语言
-            function applyLocale(locale) {
-                var data = getLocaleData(locale);
-                if (searchInput) searchInput.placeholder = data.placeholder;
-                if (searchBtn) searchBtn.innerHTML = '<span>🔍</span> ' + data.searchBtn;
-                var allOptions = document.querySelectorAll('.engine-option');
-                allOptions.forEach(function(opt) {
-                    var key = opt.dataset.engine;
-                    if (key && data.engineLabels[key]) opt.textContent = data.engineLabels[key];
-                });
-                if (footerEl) footerEl.textContent = data.footer;
-                if (data.menu) {
-                    var menuItems = document.querySelectorAll('[data-i18n]');
-                    menuItems.forEach(function(item) {
-                        var key = item.getAttribute('data-i18n');
-                        if (data.menu[key]) item.textContent = data.menu[key];
-                    });
-                }
-                overlay.classList.add('hidden');
-            }
-
-            function buildLanguageMenu(selectedLocale) {
-                langOptionsContainer.innerHTML = '';
-                SUPPORTED_LOCALES.forEach(function(locale) {
-                    var data = getLocaleData(locale);
-                    var btn = document.createElement('button');
-                    btn.className = 'lang-btn';
-                    btn.textContent = data.label;
-                    btn.dataset.locale = locale;
-                    btn.addEventListener('click', function() {
-                        var chosen = this.dataset.locale;
-                        overlay.classList.add('hidden');
-                        applyLocale(chosen);
-                        try { setCookie('preferredLocale', chosen); } catch (e) {}
-                    });
-                    langOptionsContainer.appendChild(btn);
-                });
-                var defaultData = getLocaleData(selectedLocale || DEFAULT_LOCALE);
-                menuTitle.textContent = defaultData.menuTitle || '🌐 选择语言';
-                menuSub.textContent = defaultData.menuSub || '请选择您偏好的语言';
-            }
-
-            function autoApplyLanguage() {
-                var savedLocale = getCookie('preferredLocale');
-                var finalLocale = savedLocale || detectLocale();
-                if (!isSupported(finalLocale)) finalLocale = DEFAULT_LOCALE;
-                applyLocale(finalLocale);
-                overlay.classList.add('hidden');
-            }
-
-            // 设备判断
-            function isMobileDevice() {
-                var ua = navigator.userAgent || '';
-                var keywords = ['Android', 'iPhone', 'iPad', 'iPod', 'BlackBerry', 'Windows Phone', 'Opera Mini', 'IEMobile', 'Mobile', 'webOS', 'Symbian'];
-                for (var i = 0; i < keywords.length; i++) {
-                    if (ua.indexOf(keywords[i]) !== -1) return true;
-                }
-                return false;
-            }
-
-            function isSmallScreen() {
-                return window.innerWidth < 430;
-            }
-
-            function applyDeviceClass() {
-                var body = document.body;
-                body.classList.remove('is-mobile', 'is-mobile-small');
-                isMobile = isMobileDevice();
-                if (isMobile) {
-                    body.classList.add('is-mobile');
-                    if (isSmallScreen()) body.classList.add('is-mobile-small');
-                }
-            }
-
-            var ENGINES = {
-                bing: { url: 'https://www.bing.com/search?q=' },
-                baidu: { url: 'https://www.baidu.com/s?wd=' },
-                sogou: { url: 'https://www.sogou.com/web?query=' },
-                google: { url: 'https://www.google.com/search?q=' },
-                yahoo: { url: 'https://search.yahoo.com/search?p=' },
-                bilibili: { url: 'https://search.bilibili.com/all?keyword=' },
-                duckduckgo: { url: 'https://duckduckgo.com/?q=' }
-            };
-
-            // 滑动动画（高亮切换）
-            function moveIndicatorToElement(element, animate) {
-                if (!element || !navIndicator) return;
-                var wrapper = element.closest('.desktop-capsule');
-                if (!wrapper) return;
-                var wrapperRect = wrapper.getBoundingClientRect();
-                var elRect = element.getBoundingClientRect();
-                var left = elRect.left - wrapperRect.left;
-                var width = elRect.width;
-                if (animate === false) {
-                    navIndicator.style.transition = 'none';
-                    navIndicator.style.left = left + 'px';
-                    navIndicator.style.width = width + 'px';
-                    requestAnimationFrame(function() {
-                        requestAnimationFrame(function() {
-                            navIndicator.style.transition = 'left 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-                        });
-                    });
-                } else {
-                    navIndicator.style.left = left + 'px';
-                    navIndicator.style.width = width + 'px';
-                }
-            }
-
-            function moveMobileIndicatorToElement(element, animate) {
-                if (!element || !navIndicatorMobile) return;
-                var wrapper = element.closest('.mobile-list');
-                if (!wrapper) return;
-                var wrapperRect = wrapper.getBoundingClientRect();
-                var elRect = element.getBoundingClientRect();
-                var top = elRect.top - wrapperRect.top;
-                if (animate === false) {
-                    navIndicatorMobile.style.transition = 'none';
-                    navIndicatorMobile.style.top = top + 'px';
-                    requestAnimationFrame(function() {
-                        requestAnimationFrame(function() {
-                            navIndicatorMobile.style.transition = 'top 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-                        });
-                    });
-                } else {
-                    navIndicatorMobile.style.top = top + 'px';
-                }
-            }
-
-            function setActiveEngine(engineKey, fromUser) {
-                if (!ENGINES[engineKey]) return;
-                if (currentEngineKey === engineKey && fromUser) return;
-                desktopEngineOptions.forEach(function(opt) {
-                    if (opt.dataset.engine === engineKey) opt.classList.add('active');
-                    else opt.classList.remove('active');
-                });
-                mobileEngineOptions.forEach(function(opt) {
-                    if (opt.dataset.engine === engineKey) opt.classList.add('active');
-                    else opt.classList.remove('active');
-                });
-                currentEngineKey = engineKey;
-                if (!isMobile) {
-                    var targetDesktop = document.querySelector('#desktopEngineSelector .engine-option[data-engine="' + engineKey + '"]');
-                    if (targetDesktop) moveIndicatorToElement(targetDesktop, true);
-                } else {
-                    var targetMobile = document.querySelector('#mobileEngineList .engine-option[data-engine="' + engineKey + '"]');
-                    if (targetMobile) moveMobileIndicatorToElement(targetMobile, true);
-                }
-                if (fromUser) searchInput.focus();
-            }
-
-            desktopEngineOptions.forEach(function(opt) {
-                opt.addEventListener('click', function() {
-                    var key = this.dataset.engine;
-                    if (key && ENGINES[key]) setActiveEngine(key, true);
-                });
-            });
-
-            mobileEngineOptions.forEach(function(opt) {
-                opt.addEventListener('click', function() {
-                    var key = this.dataset.engine;
-                    if (key && ENGINES[key]) setActiveEngine(key, true);
-                });
-            });
-
-            function repositionIndicator() {
-                if (isMobile) {
-                    var activeMobile = document.querySelector('#mobileEngineList .engine-option.active');
-                    if (activeMobile) moveMobileIndicatorToElement(activeMobile, false);
-                } else {
-                    var activeDesktop = document.querySelector('#desktopEngineSelector .engine-option.active');
-                    if (activeDesktop) moveIndicatorToElement(activeDesktop, false);
-                }
-            }
-
-            function performSearch() {
-                var query = searchInput.value.trim();
-                if (!query) {
-                    searchInput.style.transition = 'border 0.1s';
-                    searchInput.style.border = '1px solid rgba(255,180,180,0.4)';
-                    setTimeout(function() {
-                        searchInput.style.border = 'none';
-                    }, 300);
-                    return;
-                }
-                var engine = ENGINES[currentEngineKey];
-                if (!engine) return;
-                window.open(engine.url + encodeURIComponent(query), '_blank');
-            }
-
-            function initEvents() {
-                searchBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    performSearch();
-                });
-
-                searchInput.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        performSearch();
-                    }
-                    if (e.key === 'Enter' && e.shiftKey) {
-                        e.preventDefault();
-                        performSearch();
-                    }
-                    if (!isMobile) {
-                        var engineKeys = Object.keys(ENGINES);
-                        var currentIndex = engineKeys.indexOf(currentEngineKey);
-                        if (e.key === 'Tab') {
-                            e.preventDefault();
-                            if (e.shiftKey) {
-                                var prevIndex = (currentIndex - 1 + engineKeys.length) % engineKeys.length;
-                                setActiveEngine(engineKeys[prevIndex], true);
-                            } else {
-                                var nextIndex = (currentIndex + 1) % engineKeys.length;
-                                setActiveEngine(engineKeys[nextIndex], true);
-                            }
-                        }
-                    }
-                });
-
-                window.addEventListener('resize', function() {
-                    var body = document.body;
-                    if (isMobileDevice()) {
-                        if (window.innerWidth < 430) body.classList.add('is-mobile-small');
-                        else body.classList.remove('is-mobile-small');
-                        isMobile = true;
-                    } else {
-                        isMobile = false;
-                    }
-                    repositionIndicator();
-                });
-            }
-
-            function setBingWallpaper() {
-                var cachedImage = null;
-                try {
-                    var cachedData = getCookie('bing_wallpaper_cache');
-                    if (cachedData) {
-                        var parsed = JSON.parse(cachedData);
-                        if (parsed && parsed.data && (Date.now() - parsed.timestamp < 365 * 24 * 60 * 60 * 1000)) cachedImage = parsed.data;
-                    }
-                } catch (e) {}
-                if (cachedImage) {
-                    document.body.style.backgroundImage = 'url(' + cachedImage + ')';
-                    document.body.style.backgroundSize = 'cover';
-                    document.body.style.backgroundPosition = 'center';
-                    return;
-                }
-                var sources = [
-                    'https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN',
-                    'https://bing.img.run/1920x1080.php',
-                    'https://api.dujin.org/bing/1920.php'
-                ];
-
-                function tryLoad(index) {
-                    if (index >= sources.length) return;
-                    var url = sources[index];
-                    var img = new Image();
-                    var timeoutId = setTimeout(function() {
-                        tryLoad(index + 1);
-                    }, 5000);
-                    img.onload = function() {
-                        clearTimeout(timeoutId);
-                        document.body.style.backgroundImage = 'url(' + url + ')';
-                        document.body.style.backgroundSize = 'cover';
-                        document.body.style.backgroundPosition = 'center';
-                        try {
-                            setCookie('bing_wallpaper_cache', JSON.stringify({
-                                data: url,
-                                timestamp: Date.now()
-                            }));
-                        } catch (e) {}
-                    };
-                    img.onerror = function() {
-                        clearTimeout(timeoutId);
-                        tryLoad(index + 1);
-                    };
-                    img.src = url;
-                }
-                tryLoad(0);
-            }
-
-            function determineDefaultEngine() {
-                var savedLocale = getCookie('preferredLocale');
-                var currentLocale = savedLocale || detectLocale();
-                if (currentLocale !== 'zh-CN') return 'google';
-                return 'bing';
-            }
-
-            function initDefault() {
-                var defaultEngine = determineDefaultEngine();
-                var targetDesktop = document.querySelector('#desktopEngineSelector .engine-option[data-engine="' + defaultEngine + '"]');
-                var targetMobile = document.querySelector('#mobileEngineList .engine-option[data-engine="' + defaultEngine + '"]');
-                if (targetDesktop) targetDesktop.classList.add('active');
-                if (targetMobile) targetMobile.classList.add('active');
-                if (!isMobile) {
-                    if (targetDesktop) moveIndicatorToElement(targetDesktop, false);
-                } else {
-                    if (targetMobile) moveMobileIndicatorToElement(targetMobile, false);
-                }
-                currentEngineKey = defaultEngine;
-            }
-
-            function detectHarmonyOS() {
-                var ua = navigator.userAgent || '';
-                if (/HarmonyOS|OpenHarmony/i.test(ua)) {
-                    if (greetingTitle) greetingTitle.textContent = 'HarmonyOS';
-                    if (greetingIcon) greetingIcon.textContent = '🍃';
-                }
-            }
-
-            // ==========================================================
-            // 【新增功能】桌面端鼠标拖拽切换搜索引擎
-            // ==========================================================
-            function initDesktopDragToSwitch() {
-                var capsule = document.getElementById('desktopEngineSelector');
-                if (!capsule) return;
-
-                var isDragging = false;
-                var lastX = 0;
-                var accumulatedDelta = 0;
-
-                var onPointerDown = function(e) {
-                    var x = e.clientX || e.pageX;
-                    if (x === undefined) return;
-                    isDragging = true;
-                    lastX = x;
-                    accumulatedDelta = 0;
-                };
-
-                var onPointerMove = function(e) {
-                    if (!isDragging) return;
-                    var currentX = e.clientX || e.pageX;
-                    if (currentX === undefined) return;
-                    var delta = currentX - lastX;
-                    accumulatedDelta += delta;
-                    lastX = currentX;
-
-                    // 左右拖动累计距离超过 20px 触发切换
-                    if (Math.abs(accumulatedDelta) > 20) {
-                        var engineKeys = Object.keys(ENGINES);
-                        var currentIndex = engineKeys.indexOf(currentEngineKey);
-                        var nextIndex;
-                        if (accumulatedDelta > 0) {
-                            nextIndex = (currentIndex + 1) % engineKeys.length;
-                        } else {
-                            nextIndex = (currentIndex - 1 + engineKeys.length) % engineKeys.length;
-                        }
-                        setActiveEngine(engineKeys[nextIndex], true);
-                        accumulatedDelta = 0; // 触发后重置，避免连续切换
-                    }
-                };
-
-                var onPointerUp = function(e) {
-                    isDragging = false;
-                    accumulatedDelta = 0;
-                };
-
-                // 鼠标事件
-                capsule.addEventListener('mousedown', onPointerDown);
-                document.addEventListener('mousemove', onPointerMove);
-                document.addEventListener('mouseup', onPointerUp);
-
-                // 触摸事件（触控板、触摸屏）
-                capsule.addEventListener('touchstart', function(e) {
-                    var touch = e.touches[0];
-                    if (touch) onPointerDown({ clientX: touch.clientX, pageX: touch.pageX });
-                });
-                document.addEventListener('touchmove', function(e) {
-                    var touch = e.touches[0];
-                    if (touch) onPointerMove({ clientX: touch.clientX, pageX: touch.pageX });
-                });
-                document.addEventListener('touchend', onPointerUp);
-            }
-
-            function init() {
-                applyDeviceClass();
-                setBingWallpaper();
-                initEvents();
-                initDefault();
-                updateGreeting();
-                autoApplyLanguage();
-                detectHarmonyOS();
-                initDesktopDragToSwitch(); // 启动桌面拖拽
-                setTimeout(function() {
-                    searchInput.focus();
-                }, 300);
-            }
-
-            if (document.readyState === 'complete') {
-                init();
-            } else {
-                window.addEventListener('load', init);
-            }
-
-            window.__switchEngine = setActiveEngine;
-        })();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
